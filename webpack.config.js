@@ -20,7 +20,10 @@ module.exports = {
     ignored: ['node_modules']
   },
   resolve: {
+    extensions: [ '.js', '.vue' ],
     alias: {
+      'vue$': 'vue/dist/vue.runtime.js',
+      '@': path.resolve(__dirname, 'src'),
       Router: path.resolve(__dirname, 'src', 'router'),
       Store: path.resolve(__dirname, 'src', 'store'),
       Pages: path.resolve(__dirname, 'src', 'pages'),
