@@ -42,7 +42,7 @@
   <div id="main-wrapper" >
 
     <div class="left-column">
-        menu goes here
+        <side-bar-menu></side-bar-menu>
     </div>
     
     <div class="right-column">
@@ -54,5 +54,11 @@
 </template>
 
 <script>
-export default {};
+import SideBarMenu from './SideBarMenu';
+export default {
+  components: {
+    SideBarMenu
+  },
+  data () {}
+};
 </script>
