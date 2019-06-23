@@ -6,15 +6,11 @@
     #sbm-container {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: stretch;
       list-style-type: none;
       padding-left: 0;
 
-      .sbm-item {
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: auto;
+      .sbm-item {  
         padding: 10px;
         cursor: pointer;
         border-left: 1px solid #e8c2c2;
