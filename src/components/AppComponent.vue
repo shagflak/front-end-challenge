@@ -54,6 +54,8 @@
 <script>
 import SideBarMenu from './SideBarMenu';
 import CompanyData from './CompanyData';
+// POLYFILL FOR VUEX TO AVOID ISSUES IN BROWSERS NOT SUPPORTING PROMISE
+import 'es6-promise/auto';
 
 export default {
   components: {

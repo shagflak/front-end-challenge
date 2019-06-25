@@ -78,26 +78,31 @@
                            id="company-spend" 
                            v-model.trim="companySpend"
                            placeholder="e.g. $150,000"
-                           @blur="formatCurrency()"
-                           @focus="unformatCurrency()"
+                           @blur="setMinimumAndMaxSpend()"
                            v-numericOnly>
                 </li>
                 <li class="company-data-form-field" >
-                    <label for="company-spend">COMPANY SPEND ABILITY</label>
+                    <label for="company-spend" v-bind:class="{ 'form-field-label': true, 'form-field-error-label': !$v.companySpendAbility.numericDashBetween }" >COMPANY SPEND ABILITY</label>
                     <input type="text" 
                            name="company-spend-ability" 
                            id="company-spend-ability"
-                           placeholder="e.g. $150,000 - $330,000">
+                           placeholder="e.g. $150,000 - $330,000"
+                           v-model="companySpendAbility">
+                           <span class="form-error" v-if="!$v.companySpendAbility.numericDashBetween" >
+                               Enter minimum spend in positive numbers - maximun spend also in positive numbers.
+                            </span>
                 </li>
                 <li class="company-data-form-field" >
-                    <label>NOTES</label>
+                    <label class='form-field-label' >NOTES</label>
                     <textarea 
                     placeholder="e.g. Good Tech Company" 
                     name="company-name-notes" 
                     id="company-name-notes" 
                     cols="30" 
                     rows="10"
-                    v-on:click="displayTextAreaModal(isDisplayed = true)"></textarea>
+                    v-on:click="displayTextAreaModal(isDisplayed = true)"
+                    v-model="getLastAddtionalNote"
+                    ></textarea>
                 </li>
                 <li class="company-data-form-field" ></li>
             </ul>
@@ -108,8 +113,13 @@
 
 
 <script>
-import { required, minLength, between, numeric } from 'vuelidate/lib/validators';
+import { required, minLength, between, alpha } from 'vuelidate/lib/validators';
 import CompanyDataModal from './CompanyDataModal';
+
+const numericDashBetween = (value) => {
+    let regex = /\b([\d])+(-\b)+[0-9]*\b/g;
+    return regex.test(value);
+};
 
 export default {
     components: {
@@ -122,30 +132,49 @@ export default {
             companySpend: null,
             companySpendRaw: null,
             companySpendFormated: null,
-            // OTHER COMPONENT PROPS
-            isDisplayed: false
+
+            companySpendAbility: '',
+            companySpendAbilityRaw: '',
+            companySpendAbilityFormatted: '',
+            companySpendAbilityMinWage: 0,
+            companySpendAbilityMaxWage: 0
+
         }
     },
     methods: {
-        formatCurrency () {
+        formatCompanySpendToCurrency () {
             this.companySpendRaw = this.$data.companySpend;
             let val = (this.$data.companySpendRaw/1).toFixed(2).replace('.', ',')
-            this.$data.companySpendFormated = '$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+            this.$data.companySpendFormated = this.methods.formatCurrency(val);
             this.$data.companySpend = this.companySpendFormated;
         },
-        unformatCurrency () {
+        unformatCompanySpendCurrency () {
             this.$data.companySpend = this.$data.companySpendRaw;
+        },
+        formatCurrency (input) {
+            return '$ ' + input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         },
         displayTextAreaModal (isDisplayed) {
             this.$modal.show(CompanyDataModal, {
                 draggable: true
             });
+        },
+        setMinimumAndMaxSpend() {
+            
+        }
+    },
+    computed:{
+        getLastAddtionalNote(){
+            return this.$store.getters.getNote.note;
         }
     },
     validations: {
         companyName: {
             required,
             minLength: minLength(4),
+        },
+        companySpendAbility: {
+            numericDashBetween
         }
     },
     name: 'company-data'
