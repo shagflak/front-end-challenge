@@ -60,6 +60,8 @@ export default {
     SideBarMenu,
     CompanyData
   },
-  data () {}
+  data () {
+    return {}
+  }
 };
 </script>

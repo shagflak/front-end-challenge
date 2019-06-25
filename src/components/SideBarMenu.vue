@@ -55,7 +55,9 @@
 
 <script>
 export default {
-    data () {},
+    data () {
+      return {}
+    },
     name: 'side-bar-menu'
 };
 </script>
